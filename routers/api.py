@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from datetime import date, datetime
 
 from models.price_data import SalesRecords
@@ -23,6 +23,10 @@ async def get_total_items(start_date: str, end_date: str, department: str) -> in
 
 @router.get("/nth_most_total_item")
 async def get_nth_most_total_item(item_by: str, start_date: str, end_date: str, n: int) -> str:
+
+    if (item_by != "quantity" and item_by != "price"):
+        raise HTTPException(status_code=400, detail="Invalid item_by value")
+
     start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
     end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
     item = ob.getNthMostItem(item_by, start_date, end_date, n)

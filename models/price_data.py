@@ -18,8 +18,9 @@ class SalesRecords:
                                                                           < end_date)]
 
         cond = 'seats' if item_by == 'quantity' else 'amount'
-        grouped_data = productsInRange.groupby('software')[cond].sum()
-        return (grouped_data[n-1])
+        grouped_data = productsInRange.groupby(
+            'software')[cond].sum().sort_values(ascending=False)
+        return (grouped_data.index[n-1])
 
     def getDepartmentWiseSoldPercentage(self, start_date, end_date):
         productsInRange = self.df[(self.df['parseddate'] > start_date) & (self.df['parseddate']
